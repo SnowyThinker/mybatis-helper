@@ -1,6 +1,11 @@
 package io.github.snowthinker.mh;
 
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -8,10 +13,6 @@ import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.ParameterMode;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
-import org.apache.ibatis.reflection.factory.ObjectFactory;
-import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
-import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
@@ -19,19 +20,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * 
  * @author Andrew
  *
  */
 public class MybatisSqlHelper {
-    private static final ObjectFactory DEFAULT_OBJECT_FACTORY = new DefaultObjectFactory();
-    private static final ObjectWrapperFactory DEFAULT_OBJECT_WRAPPER_FACTORY = new DefaultObjectWrapperFactory();
+    //private static final ObjectFactory DEFAULT_OBJECT_FACTORY = new DefaultObjectFactory();
+    //private static final ObjectWrapperFactory DEFAULT_OBJECT_WRAPPER_FACTORY = new DefaultObjectWrapperFactory();
 
     /**
      * 通过接口获取sql
@@ -44,7 +40,7 @@ public class MybatisSqlHelper {
     public static String getMapperSql(Object mapper, String methodName, Object... args) {
         MetaObject metaObject = SystemMetaObject.forObject(mapper);
         SqlSession session = (SqlSession) metaObject.getValue("h.sqlSession");
-        Class<?> mapperInterface = (Class) metaObject.getValue("h.mapperInterface");
+        Class<?> mapperInterface = (Class<?>) metaObject.getValue("h.mapperInterface");
         String fullMethodName = mapperInterface.getCanonicalName() + "." + methodName;
         if (args == null || args.length == 0) {
             return getNamespaceSql(session, fullMethodName, null);
@@ -66,7 +62,7 @@ public class MybatisSqlHelper {
             return getNamespaceSql(session, fullMapperMethodName, null);
         }
         String methodName = fullMapperMethodName.substring(fullMapperMethodName.lastIndexOf('.') + 1);
-        Class mapperInterface = null;
+        Class<?> mapperInterface = null;
         try {
             mapperInterface = Class.forName(fullMapperMethodName.substring(0, fullMapperMethodName.lastIndexOf('.')));
             return getMapperSql(session, mapperInterface, methodName, args);
@@ -84,13 +80,14 @@ public class MybatisSqlHelper {
      * @param args
      * @return
      */
-    public static String getMapperSql(SqlSession session, Class mapperInterface, String methodName, Object... args) {
+    @SuppressWarnings("unchecked")
+	public static String getMapperSql(SqlSession session, Class<?> mapperInterface, String methodName, Object... args) {
         String fullMapperMethodName = mapperInterface.getCanonicalName() + "." + methodName;
         if (args == null || args.length == 0) {
             return getNamespaceSql(session, fullMapperMethodName, null);
         }
         Method method = getDeclaredMethods(mapperInterface, methodName);
-        Map params = new HashMap();
+        Map<String, Object> params = new HashMap<>();
         final Class<?>[] argTypes = method.getParameterTypes();
         for (int i = 0; i < argTypes.length; i++) {
             if (!RowBounds.class.isAssignableFrom(argTypes[i]) && !ResultHandler.class.isAssignableFrom(argTypes[i])) {
@@ -102,7 +99,7 @@ public class MybatisSqlHelper {
         if (args != null && args.length == 1) {
             Object _params = wrapCollection(args[0]);
             if (_params instanceof Map) {
-                params.putAll((Map) _params);
+                params.putAll((Map<String, Object>) _params);
             }
         }
         return getNamespaceSql(session, fullMapperMethodName, params);
@@ -171,7 +168,7 @@ public class MybatisSqlHelper {
      * @param javaType
      * @return
      */
-    private static String replaceParameter(String sql, Object value, JdbcType jdbcType, Class javaType) {
+    private static String replaceParameter(String sql, Object value, JdbcType jdbcType, Class<?> javaType) {
         String strValue = String.valueOf(value);
         if (jdbcType != null) {
             switch (jdbcType) {
@@ -212,7 +209,7 @@ public class MybatisSqlHelper {
      * @param methodName
      * @return
      */
-    private static Method getDeclaredMethods(Class clazz, String methodName) {
+    private static Method getDeclaredMethods(Class<?> clazz, String methodName) {
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals(methodName)) {
