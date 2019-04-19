@@ -1,24 +1,10 @@
 package io.github.snowthinker.mh;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
-
-public interface MyBatisEnum<E extends Enum<E>, T> {
-	
-	//接口实现类装载容器，方便快速获取全部子类，所有实现子类必须使用静态块将其注册进来
-    Set<Class<?>> subClass = new ConcurrentSkipListSet<>();
-
-    /**
-     * 真正与数据库进行映射的值
-     *
-     * @return
+public interface MyBatisEnum<E extends Enum<?>, T> {
+    
+	/**
+     * 获取枚举的值
+     * @return 枚举的值
      */
     T getValue();
-
-    /**
-     * 显示的信息
-     *
-     * @return
-     */
-    String getDisplayName();
 }
