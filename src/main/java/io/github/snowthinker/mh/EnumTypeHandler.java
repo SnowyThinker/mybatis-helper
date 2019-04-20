@@ -10,7 +10,7 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
 @SuppressWarnings("rawtypes")
-public abstract class EnumTypeHandler<E extends Enum<E> & MyBatisEnum> extends BaseTypeHandler<E> {
+public class EnumTypeHandler<E extends Enum<E> & MyBatisEnum> extends BaseTypeHandler<E> {
 	/**
 	 * 枚举的class
 	 */

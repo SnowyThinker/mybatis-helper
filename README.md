@@ -10,6 +10,21 @@ pom 引入jar包
 </dependency>
 ~~~
 
+编写枚举类
+~~~
+public enum StockMarket implements MyBatisEnum<StockMarket, Integer>{
+	
+	US, 
+	HK, 
+	CN;
+	
+	@Override
+	public Integer getValue() {
+		return this.ordinal();
+	}
+}
+~~~
+
 ####字段枚举支持
 mybatis.xml 添加typeHandler
 ~~~
