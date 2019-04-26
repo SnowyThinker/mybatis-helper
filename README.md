@@ -13,11 +13,11 @@ pom 引入jar包
 编写枚举类
 ~~~
 public enum StockMarket implements MyBatisEnum<StockMarket, Integer>{
-	
-	US, 
-	HK, 
+
+	US,
+	HK,
 	CN;
-	
+
 	@Override
 	public Integer getValue() {
 		return this.ordinal();
@@ -39,3 +39,10 @@ String sql = MybatisSqlHelper.getMapperSql("oi.github.snowthinker.mapper.UserMap
 System.out.println(sql);
 ~~~
 
+<script type="text/javascript" src="https://snowthinker.github.io/reward.js"></script>
+<!--
+<div class='reward'>
+	<div style='text-align: center; display: inline-block; '><img width='250' height='250' src='https://snowthinker.github.io/res/wechat_pay.jpeg'/> &nbsp; &nbsp;&nbsp; <img width='250' height='250' src='https://snowthinker.github.io/res/alipay.jpeg'/>
+</div>
+<div>
+-->
