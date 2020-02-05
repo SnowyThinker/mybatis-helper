@@ -35,5 +35,13 @@ public abstract class AdvancedPageQuery<T extends Object> {
 	public static String hump2Line(String property) {
 		Matcher matcher = humpPattern.matcher(property);
 		StringBuffer sb = new StringBuffer();
+		
+		while(matcher.find()) {
+			matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+		}
+		
+		matcher.appendTail(sb);
+		
+		return sb.toString();
 	}
 }
