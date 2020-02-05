@@ -1,7 +1,8 @@
 package io.github.snowthinker.mh.page;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,10 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
+@SuppressWarnings("serial")
+@Data
 public abstract class AdvancedPageQuery<T extends Object> implements Serializable {
 	
 	@NotNull(message="当前页数不能为空")
@@ -23,37 +27,11 @@ public abstract class AdvancedPageQuery<T extends Object> implements Serializabl
 	private Integer pageSize;
 	
 	@ApiModelProperty(value="表单排序（排序字段: 排序方向） sendTime : desc", required=false)
-	private Map<String, Object> sorts = new HashMap<>();
+	private List<PageSort> sorts = new ArrayList<>();
     
-
-	public int getCurrentPage() {
-		return currentPage;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-
 	public abstract T getConditions();
 
 	public abstract void setConditions(T conditions);
-
-	public Map<String, Object> getSorts() {
-		return sorts;
-	}
-
-	public void setSorts(Map<String, Object> sorts) {
-		this.sorts = sorts;
-	}
 	
 	public abstract Map<String, Object> asMap();
-	
 }

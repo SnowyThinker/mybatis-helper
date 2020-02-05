@@ -5,9 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+
+@SuppressWarnings("serial")
+@Data
+@EqualsAndHashCode(callSuper=false)
 public class Query extends LinkedHashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
 	//当前页码
     private int page;
     //每页条数
@@ -17,14 +22,6 @@ public class Query extends LinkedHashMap<String, Object> {
     
     private List<PageSort> sorts = new ArrayList<>();
     
-    public List<PageSort> getSorts() {
-		return sorts;
-	}
-
-	public void setSorts(List<PageSort> sorts) {
-		this.sorts = sorts;
-	}
-
 	public Query() {}
 
 	public Query(Map<String, Object> params){
@@ -40,36 +37,11 @@ public class Query extends LinkedHashMap<String, Object> {
         if(null != sorts && !sorts.isEmpty()) {
         	this.put("sort", sorts);	
         }
-        
     }
 
     public void isPaging(boolean bool){
         if(bool){
             this.put("paging",this);
         }
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
     }
 }

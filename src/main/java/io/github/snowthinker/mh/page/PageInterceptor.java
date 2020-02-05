@@ -25,7 +25,6 @@ import org.apache.ibatis.session.RowBounds;
 public class PageInterceptor implements Interceptor{
 
     public Object intercept(Invocation invocation) throws Throwable {
-
         //当前环境 MappedStatement，BoundSql，及sql取得
         MappedStatement mappedStatement=(MappedStatement)invocation.getArgs()[0];
         Object parameter = invocation.getArgs()[1];
@@ -61,7 +60,6 @@ public class PageInterceptor implements Interceptor{
             invocation.getArgs()[0]= newMs;
         }
         return invocation.proceed();
-
     }
 
     private Query searchPageWithXpath(Object o,String... xpaths) {
