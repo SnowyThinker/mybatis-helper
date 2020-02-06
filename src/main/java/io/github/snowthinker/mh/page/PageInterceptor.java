@@ -51,7 +51,7 @@ public class PageInterceptor implements Interceptor{
             rs.close();
             countStmt.close();
             connection.close();
-            queryPage.setTotal(totpage);
+            //queryPage.setTotal(totpage);
 
             //对原始Sql追加limit
             int pageSize = queryPage.getPageSize();

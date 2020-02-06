@@ -38,14 +38,10 @@ public class PageQuery implements Serializable {
 	@ApiModelProperty(value="表单排序", required=false)
 	private List<PageSort> sorts = new ArrayList<>();
 	
-	@ApiModelProperty(value="总条数", required=false, hidden=true)
-    private Integer total;
-
 	public Map<String, Object> asMap() {
 		Map<String, Object> rs = new HashMap<String, Object>();
 		rs.put("pageSize", pageSize);
 		rs.put("currentPage", currentPage);
-		rs.put("paging", true);
 		
 		rs.putAll(this.conditions);
 		rs.put("sorts", hump2UnderLine(sorts));
