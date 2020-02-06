@@ -21,7 +21,9 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 
-@Intercepts({@Signature(type=Executor.class,method="query",args={ MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class })})
+@Intercepts({ @Signature(type = Executor.class, method = "query", args = 
+		{ MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }) 
+})
 public class PageInterceptor implements Interceptor{
 
     public Object intercept(Invocation invocation) throws Throwable {
@@ -32,7 +34,7 @@ public class PageInterceptor implements Interceptor{
         String originalSql = boundSql.getSql().trim();
         Object parameterObject = boundSql.getParameterObject();
 
-        Query queryPage = searchPageWithXpath(parameterObject,".","paging");
+        PageQuery queryPage = searchPageWithXpath(parameterObject);
         if(queryPage!=null ){
             //Page对象存在的场合，开始分页处理
             String countSql = getCountSql(originalSql);
@@ -52,9 +54,9 @@ public class PageInterceptor implements Interceptor{
             queryPage.setTotal(totpage);
 
             //对原始Sql追加limit
-            int offset = (int)queryPage.get("offset");
+            int pageSize = queryPage.getPageSize();
             StringBuffer sb = new StringBuffer();
-            sb.append(originalSql).append(" limit ").append(offset).append(",").append(queryPage.getLimit());
+            sb.append(originalSql).append(" limit ").append(pageSize).append(",").append((queryPage.getCurrentPage() + 1) * queryPage.getPageSize());
             BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, sb.toString());
             MappedStatement newMs = copyFromMappedStatement(mappedStatement,new BoundSqlSqlSource(newBoundSql));
             invocation.getArgs()[0]= newMs;
@@ -62,13 +64,11 @@ public class PageInterceptor implements Interceptor{
         return invocation.proceed();
     }
 
-    private Query searchPageWithXpath(Object o,String... xpaths) {
-        if (o instanceof Query) {
-            Query query = (Query) o;
-            for(String xpath : xpaths){
-                if(query.containsKey(xpath)){
-                    return query;
-                }
+    private PageQuery searchPageWithXpath(Object o) {
+        if (o instanceof PageQuery) {
+        	PageQuery query = (PageQuery) o;
+            if(null != query.getCurrentPage() && null != query.getPageSize()) {
+            	return query;
             }
         }
        return null;
@@ -114,7 +114,7 @@ public class PageInterceptor implements Interceptor{
      * 根据原Sql语句获取对应的查询总记录数的Sql语句
      */
     private String getCountSql(String sql) {
-        return "SELECT COUNT(*) FROM (" + sql + ") aliasForPage";
+        return "SELECT COUNT(*) FROM (" + sql + ") t";
     }
 
     public class BoundSqlSqlSource implements SqlSource {

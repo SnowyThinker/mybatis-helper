@@ -3,8 +3,6 @@ package io.github.snowthinker.mh.page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -17,16 +15,12 @@ import org.hibernate.validator.constraints.Range;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-/**
- * 
- * @author Nicholas
- * 2019年4月11日 下午2:59:41
- */
+
 @SuppressWarnings("serial")
 @Data
 public class PageQuery implements Serializable {
 	
-	private static Pattern humpPattern = Pattern.compile("[A-Z]");	
+	private static final Pattern humpPattern = Pattern.compile("[A-Z]");	
 	
 	@NotNull(message="当前页数不能为空")
 	@Range(min=1, message="请输入合法的当前页数")
@@ -43,6 +37,9 @@ public class PageQuery implements Serializable {
 	
 	@ApiModelProperty(value="表单排序", required=false)
 	private List<PageSort> sorts = new ArrayList<>();
+	
+	@ApiModelProperty(value="总条数", required=false, hidden=true)
+    private Integer total;
 
 	public Map<String, Object> asMap() {
 		Map<String, Object> rs = new HashMap<String, Object>();
@@ -51,17 +48,20 @@ public class PageQuery implements Serializable {
 		rs.put("paging", true);
 		
 		rs.putAll(this.conditions);
-		rs.putAll(this.sorts);
-		rs.put("_sorts", hump2UnderLine(this.sorts,rs));
+		rs.put("sorts", hump2UnderLine(sorts));
 		
 		return rs;
 	}
 	
-	/**
-	 * @param sorts2
-	 * @return
-	 */
-	private Map<? extends String, ? extends Object> hump2UnderLine(Map<String, Object> sorts,Map<String, Object> rs) {
+	private List<PageSort> hump2UnderLine(List<PageSort> sortList) {
+		for(PageSort pageSort : sortList) {
+			String newKey = hump2Line(pageSort.getOrderBy());
+			pageSort.setOrderBy(newKey);
+		}
+		return sortList;
+	}
+
+	/*private Map<? extends String, ? extends Object> hump2UnderLine(Map<String, Object> sorts,Map<String, Object> rs) {
 		if(null == sorts || sorts.isEmpty()) {
 			return null;
 		}
@@ -74,9 +74,8 @@ public class PageQuery implements Serializable {
 			rsMap.put(newKey, sorts.get(key));
 		}
 		return rsMap;
-	}
+	}*/
 
-	
 	public static String hump2Line(String str) {
         Matcher matcher = humpPattern.matcher(str);
         StringBuffer sb = new StringBuffer();
