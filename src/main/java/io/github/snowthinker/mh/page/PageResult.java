@@ -6,10 +6,8 @@ import java.util.Map;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
-@ToString
 public class PageResult<T> {
 	
 	@ApiModelProperty("总记录数")
@@ -44,5 +42,11 @@ public class PageResult<T> {
 		this.pageSize = pageQuery.getPageSize();
 		this.currentPage = pageQuery.getCurrentPage();
 		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
+	}
+
+	@Override
+	public String toString() {
+		return "PageResult [totalCount=" + totalCount + ", pageSize=" + pageSize + ", totalPage=" + totalPage
+				+ ", currentPage=" + currentPage + ", list=" + (null == list ? 0 : list.size()) + ", additional=" + additional + "]";
 	}
 }

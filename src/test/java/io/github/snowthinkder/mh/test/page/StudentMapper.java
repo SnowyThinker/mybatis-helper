@@ -9,5 +9,7 @@ public interface StudentMapper {
 	
 	Long queryTotalCount(Map<String, Object> params);
 	
-	String createTable();
+	void createTable();
+	
+	int insert(Student student);
 }

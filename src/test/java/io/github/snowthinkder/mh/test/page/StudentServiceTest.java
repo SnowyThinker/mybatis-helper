@@ -5,19 +5,30 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.github.snowthinkder.mh.test.SqlSessionFactoryHelper;
 import io.github.snowthinker.mh.page.PageQuery;
 import io.github.snowthinker.mh.page.PageResult;
 
 public class StudentServiceTest {
 	
-	/*@Before
+	private static StudentService studentService;
+	
+	static {
+		try {
+			studentService = new StudentService();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Before
 	public void testSetup() {
-	}*/
+		studentService.createTable();
+		studentService.batchInsert();
+	}
 
 	@Test
 	public void testQueryPage() throws IOException {
-		StudentService studentService = new StudentService();
+		//StudentService studentService = new StudentService();
 		
 		PageQuery pageQuery = new PageQuery();
 		pageQuery.setPageSize(10);

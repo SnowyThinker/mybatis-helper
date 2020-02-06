@@ -6,13 +6,21 @@
     select * from student
   </select>
   
+  <select id="queryTotalCount" resultType="java.lang.Long">
+  	select count(*) from student
+  </select>
+  
   <update id="createTable" parameterType="java.lang.String">
-	create table student
+	create table if not exists student
 	(
-	   id integer not null,
+	   id varchar(100) not null,
 	   name varchar(255) not null,
 	   passport_number varchar(255) not null,
 	   primary key(id)
 	)
-</update>
+	</update>
+	
+	<insert id="insert" parameterType="Student">
+		insert into student values(#{id}, #{name}, #{passportNumber})
+	</insert>
 </mapper>
