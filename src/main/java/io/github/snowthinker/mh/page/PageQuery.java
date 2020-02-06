@@ -1,6 +1,5 @@
 package io.github.snowthinker.mh.page;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +15,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 
-@SuppressWarnings("serial")
 @Data
-public class PageQuery implements Serializable {
+public class PageQuery {
 	
 	private static final Pattern humpPattern = Pattern.compile("[A-Z]");	
 	

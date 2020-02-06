@@ -1,6 +1,5 @@
 package io.github.snowthinker.mh.page;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +11,8 @@ import org.hibernate.validator.constraints.Range;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@SuppressWarnings("serial")
 @Data
-public abstract class AdvancedPageQuery<T extends Object> implements Serializable {
+public abstract class AdvancedPageQuery<T extends Object> {
 	
 	@NotNull(message="当前页数不能为空")
 	@Range(min=1, message="请输入合法的当前页数")
