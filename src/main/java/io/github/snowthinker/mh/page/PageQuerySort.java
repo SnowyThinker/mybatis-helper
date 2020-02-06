@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageSort {
+public class PageQuerySort {
 
 	private String orderBy;
 	

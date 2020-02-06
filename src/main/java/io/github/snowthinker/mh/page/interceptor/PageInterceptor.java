@@ -20,7 +20,7 @@ import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import io.github.snowthinker.mh.page.PageQuery;
+import io.github.snowthinker.mh.page.PageQueryRequest;
 
 
 @Intercepts({ 
@@ -36,7 +36,7 @@ public class PageInterceptor implements Interceptor{
         String originalSql = boundSql.getSql().trim();
         Object parameterObject = boundSql.getParameterObject();
 
-        PageQuery queryPage = searchPageWithXpath(parameterObject);
+        PageQueryRequest queryPage = searchPageWithXpath(parameterObject);
         if(queryPage!=null ){
             //Page对象存在的场合，开始分页处理
             String countSql = getCountSql(originalSql);
@@ -66,9 +66,9 @@ public class PageInterceptor implements Interceptor{
         return invocation.proceed();
     }
 
-    private PageQuery searchPageWithXpath(Object o) {
-        if (o instanceof PageQuery) {
-        	PageQuery query = (PageQuery) o;
+    private PageQueryRequest searchPageWithXpath(Object o) {
+        if (o instanceof PageQueryRequest) {
+        	PageQueryRequest query = (PageQueryRequest) o;
             if(null != query.getCurrentPage() && null != query.getPageSize()) {
             	return query;
             }

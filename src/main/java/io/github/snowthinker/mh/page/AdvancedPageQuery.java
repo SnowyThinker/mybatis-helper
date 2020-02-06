@@ -25,7 +25,7 @@ public abstract class AdvancedPageQuery<T extends Object> {
 	private Integer pageSize;
 	
 	@ApiModelProperty(value="表单排序（排序字段: 排序方向） sendTime : desc", required=false)
-	private List<PageSort> sorts = new ArrayList<>();
+	private List<PageQuerySort> sorts = new ArrayList<>();
     
 	public abstract T getConditions();
 

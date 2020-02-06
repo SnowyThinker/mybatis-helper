@@ -25,17 +25,4 @@ public class SqlSessionFactoryHelper {
 		
 		return sqlSessionFactory;
 	}
-	
-	/*public static synchronized SqlSessionFactory getInstance() throws IOException {
-		if(null != sqlSessionFactory) {
-			return sqlSessionFactory;
-		}
-		
-		String resource = "classpath: mybatis-config.xml";
-		InputStream inputStream = Resources.getResourceAsStream(resource);
-		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-		SqlSessionFactoryHelper.sqlSessionFactory = sqlSessionFactory;
-		
-		return sqlSessionFactory;
-	}*/
 }

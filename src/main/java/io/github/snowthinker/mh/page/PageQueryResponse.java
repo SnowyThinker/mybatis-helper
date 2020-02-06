@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class PageResult<T> {
+public class PageQueryResponse<T> {
 	
 	@ApiModelProperty("总记录数")
 	private long totalCount;
@@ -28,7 +28,7 @@ public class PageResult<T> {
 	@ApiModelProperty("其它数据")
 	private Map<String, ?> additional = new HashMap<>();
 	
-	public PageResult(List<T> list, long totalCount, int pageSize, int currentPage) {
+	public PageQueryResponse(List<T> list, long totalCount, int pageSize, int currentPage) {
 		this.list = list;
 		this.totalCount = totalCount;
 		this.pageSize = pageSize;
@@ -36,7 +36,7 @@ public class PageResult<T> {
 		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
 	}
 	
-	public PageResult(List<T> list, long totalCount, PageQuery pageQuery) {
+	public PageQueryResponse(List<T> list, long totalCount, PageQueryRequest pageQuery) {
 		this.list = list;
 		this.totalCount = totalCount;
 		this.pageSize = pageQuery.getPageSize();

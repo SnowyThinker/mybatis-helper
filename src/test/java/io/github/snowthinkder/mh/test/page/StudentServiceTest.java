@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.github.snowthinker.mh.page.PageQuery;
-import io.github.snowthinker.mh.page.PageResult;
+import io.github.snowthinker.mh.page.PageQueryRequest;
+import io.github.snowthinker.mh.page.PageQueryResponse;
 
 public class StudentServiceTest {
 	
@@ -30,11 +30,11 @@ public class StudentServiceTest {
 	public void testQueryPage() throws IOException {
 		//StudentService studentService = new StudentService();
 		
-		PageQuery pageQuery = new PageQuery();
+		PageQueryRequest pageQuery = new PageQueryRequest();
 		pageQuery.setPageSize(10);
 		pageQuery.setCurrentPage(1);
 		
-		PageResult<Student> pageResult = studentService.queryPageList(pageQuery);
+		PageQueryResponse<Student> pageResult = studentService.queryPageList(pageQuery);
 		System.out.println(pageResult);
 	}
 }

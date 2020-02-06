@@ -1,13 +1,14 @@
 package io.github.snowthinkder.mh.test.page;
 
 import java.util.List;
-import java.util.Map;
+
+import io.github.snowthinker.mh.page.PageQueryRequest;
 
 public interface StudentMapper {
 
-	List<Student> queryPageList(Map<String, Object> params);
+	List<Student> queryPageList(PageQueryRequest pageQuery);
 	
-	Long queryTotalCount(Map<String, Object> params);
+	Long queryTotalCount(PageQueryRequest pageQuery);
 	
 	void createTable();
 	

@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import io.github.snowthinkder.mh.test.SqlSessionFactoryHelper;
-import io.github.snowthinker.mh.page.PageQuery;
-import io.github.snowthinker.mh.page.PageResult;
+import io.github.snowthinker.mh.page.PageQueryRequest;
+import io.github.snowthinker.mh.page.PageQueryResponse;
 
 public class StudentService {
 	
@@ -32,10 +32,10 @@ public class StudentService {
 		}
 	}
 
-	public PageResult<Student> queryPageList(PageQuery pageQuery) throws IOException {
-		List<Student> dataList = studentMapper.queryPageList(pageQuery.asMap());
-		Long totalCount = studentMapper.queryTotalCount(pageQuery.asMap());
+	public PageQueryResponse<Student> queryPageList(PageQueryRequest pageQuery) throws IOException {
+		List<Student> dataList = studentMapper.queryPageList(pageQuery);
+		Long totalCount = studentMapper.queryTotalCount(pageQuery);
 		
-		return new PageResult<>(dataList, totalCount, pageQuery);
+		return new PageQueryResponse<>(dataList, totalCount, pageQuery);
 	}
 }
