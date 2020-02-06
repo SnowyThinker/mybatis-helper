@@ -1,4 +1,4 @@
-package io.github.snowthinker.mh.page;
+package io.github.snowthinker.mh.page.interceptor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +19,8 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+
+import io.github.snowthinker.mh.page.PageQuery;
 
 
 @Intercepts({ 

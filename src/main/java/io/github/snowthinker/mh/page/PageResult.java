@@ -6,8 +6,10 @@ import java.util.Map;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class PageResult<T> {
 	
 	@ApiModelProperty("总记录数")
