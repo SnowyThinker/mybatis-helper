@@ -1,8 +1,5 @@
-package io.github.snowthinker.mh.page.interceptor;
+package io.github.snowythinker.mh.page.interceptor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Properties;
 
 import org.apache.ibatis.executor.Executor;
@@ -16,11 +13,10 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
-import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import io.github.snowthinker.mh.page.PageQueryRequest;
+import io.github.snowythinker.mh.page.PageQueryRequest;
 
 
 @Intercepts({ 
@@ -30,39 +26,48 @@ public class PageInterceptor implements Interceptor{
 
     public Object intercept(Invocation invocation) throws Throwable {
         //当前环境 MappedStatement，BoundSql，及sql取得
-        MappedStatement mappedStatement=(MappedStatement)invocation.getArgs()[0];
-        Object parameter = invocation.getArgs()[1];
-        BoundSql boundSql = mappedStatement.getBoundSql(parameter);
-        String originalSql = boundSql.getSql().trim();
-        Object parameterObject = boundSql.getParameterObject();
-
-        PageQueryRequest queryPage = searchPageWithXpath(parameterObject);
-        if(queryPage!=null ){
-            //Page对象存在的场合，开始分页处理
-            String countSql = getCountSql(originalSql);
-            Connection connection=mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection()  ;
-            PreparedStatement countStmt = connection.prepareStatement(countSql);
-            BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
-            DefaultParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
-            parameterHandler.setParameters(countStmt);
-            ResultSet rs = countStmt.executeQuery();
-            int totpage=0;
-            if (rs.next()) {
-                totpage = rs.getInt(1);
-            }
-            rs.close();
-            countStmt.close();
-            connection.close();
-            //queryPage.setTotal(totpage);
-
-            //对原始Sql追加limit
-            int pageSize = queryPage.getPageSize();
-            StringBuffer sb = new StringBuffer();
-            sb.append(originalSql).append(" limit ").append(pageSize).append(",").append((queryPage.getCurrentPage() + 1) * queryPage.getPageSize());
-            BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, sb.toString());
-            MappedStatement newMs = copyFromMappedStatement(mappedStatement,new BoundSqlSqlSource(newBoundSql));
-            invocation.getArgs()[0]= newMs;
+		MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
+		Object parameter = invocation.getArgs()[1];
+		BoundSql boundSql = mappedStatement.getBoundSql(parameter);
+		String originalSql = boundSql.getSql().trim().toUpperCase();
+        
+        if(originalSql.contains("COUNT(")) {
+        	return invocation.proceed();
         }
+        
+        Object parameterObject = boundSql.getParameterObject();
+        PageQueryRequest queryPage = searchPageWithXpath(parameterObject);
+        if(null == queryPage) {
+        	return invocation.proceed();
+        }
+        
+        //Page对象存在的场合，开始分页处理
+        /*String countSql = getCountSql(originalSql);
+        Connection connection=mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
+        PreparedStatement countStmt = connection.prepareStatement(countSql);
+        BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
+        DefaultParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
+        parameterHandler.setParameters(countStmt);
+        ResultSet rs = countStmt.executeQuery();
+        Long totalCount = 0L;
+        if (rs.next()) {
+        	totalCount = rs.getLong(1);
+        }
+        rs.close();
+        countStmt.close();
+        connection.close();
+        queryPage.setTotalCount(totalCount);*/
+
+        //对原始Sql追加limit
+        int pageSize = queryPage.getPageSize();
+        int startRow = (queryPage.getCurrentPage() - 1) * pageSize;
+        //int endRow = queryPage.getCurrentPage() * pageSize;
+        StringBuffer sb = new StringBuffer();
+        sb.append(originalSql).append(" limit ").append(startRow).append(",").append(pageSize);
+        BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, sb.toString());
+        MappedStatement newMs = copyFromMappedStatement(mappedStatement,new BoundSqlSqlSource(newBoundSql));
+        invocation.getArgs()[0]= newMs;
+            
         return invocation.proceed();
     }
 
@@ -115,9 +120,9 @@ public class PageInterceptor implements Interceptor{
     /**
      * 根据原Sql语句获取对应的查询总记录数的Sql语句
      */
-    private String getCountSql(String sql) {
+    /*private String getCountSql(String sql) {
         return "SELECT COUNT(*) FROM (" + sql + ") t";
-    }
+    }*/
 
     public class BoundSqlSqlSource implements SqlSource {
         BoundSql boundSql;

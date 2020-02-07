@@ -1,4 +1,4 @@
-package io.github.snowthinkder.mh.test;
+package io.github.snowythinker.mh.test;
 
 import java.io.IOException;
 import java.io.InputStream;

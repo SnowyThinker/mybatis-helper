@@ -5,4 +5,4 @@
  * @author Nicholas
  *
  */
-package io.github.snowthinker.mh;
+package io.github.snowythinker.mh;

@@ -1,4 +1,4 @@
-package io.github.snowthinker.mh.page;
+package io.github.snowythinker.mh.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

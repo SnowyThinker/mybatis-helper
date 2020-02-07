@@ -1,4 +1,4 @@
-package io.github.snowthinker.mh.page;
+package io.github.snowythinker.mh.page;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +35,9 @@ public class PageQueryRequest {
 	
 	@ApiModelProperty(value="表单排序", required=false)
 	private List<PageQuerySort> sorts = new ArrayList<>();
+	
+	/*@ApiModelProperty("总记录数")
+	private Long totalCount;*/
 	
 	public Map<String, Object> asMap() {
 		Map<String, Object> rs = new HashMap<String, Object>();

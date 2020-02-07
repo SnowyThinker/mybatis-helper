@@ -1,4 +1,4 @@
-package io.github.snowthinker.mh.page;
+package io.github.snowythinker.mh.page;
 
 import java.util.ArrayList;
 import java.util.List;

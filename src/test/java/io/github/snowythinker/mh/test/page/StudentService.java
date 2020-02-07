@@ -1,4 +1,4 @@
-package io.github.snowthinkder.mh.test.page;
+package io.github.snowythinker.mh.test.page;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import io.github.snowthinkder.mh.test.SqlSessionFactoryHelper;
-import io.github.snowthinker.mh.page.PageQueryRequest;
-import io.github.snowthinker.mh.page.PageQueryResponse;
+import io.github.snowythinker.mh.page.PageQueryRequest;
+import io.github.snowythinker.mh.page.PageQueryResponse;
+import io.github.snowythinker.mh.test.SqlSessionFactoryHelper;
 
 public class StudentService {
 	

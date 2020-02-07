@@ -1,6 +1,6 @@
-package io.github.snowthinkder.mh.test;
+package io.github.snowythinker.mh.test;
 
-import io.github.snowthinker.mh.MyBatisEnum;
+import io.github.snowythinker.mh.MyBatisEnum;
 
 public enum UserStatus implements MyBatisEnum<UserStatus, Integer>{
 	

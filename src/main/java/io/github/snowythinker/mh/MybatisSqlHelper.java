@@ -1,4 +1,4 @@
-package io.github.snowthinker.mh;
+package io.github.snowythinker.mh;
 
 
 import java.lang.reflect.Method;

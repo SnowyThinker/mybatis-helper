@@ -1,12 +1,12 @@
-package io.github.snowthinkder.mh.test.page;
+package io.github.snowythinker.mh.test.page;
 
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import io.github.snowthinker.mh.page.PageQueryRequest;
-import io.github.snowthinker.mh.page.PageQueryResponse;
+import io.github.snowythinker.mh.page.PageQueryRequest;
+import io.github.snowythinker.mh.page.PageQueryResponse;
 
 public class StudentServiceTest {
 	
@@ -32,7 +32,7 @@ public class StudentServiceTest {
 		
 		PageQueryRequest pageQuery = new PageQueryRequest();
 		pageQuery.setPageSize(10);
-		pageQuery.setCurrentPage(1);
+		pageQuery.setCurrentPage(2);
 		
 		PageQueryResponse<Student> pageResult = studentService.queryPageList(pageQuery);
 		System.out.println(pageResult);

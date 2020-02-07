@@ -8,11 +8,11 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias alias="Student" type="io.github.snowthinkder.mh.test.page.Student"/>
+		<typeAlias alias="Student" type="io.github.snowythinker.mh.test.page.Student"/>
 	</typeAliases>
 
 	<plugins>
-		<plugin interceptor="io.github.snowthinker.mh.page.interceptor.PageInterceptor" />
+		<plugin interceptor="io.github.snowythinker.mh.page.interceptor.PageInterceptor" />
 	</plugins>
 
 	<environments default="development">

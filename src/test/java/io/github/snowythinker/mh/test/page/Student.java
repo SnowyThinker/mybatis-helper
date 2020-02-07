@@ -1,4 +1,4 @@
-package io.github.snowthinkder.mh.test.page;
+package io.github.snowythinker.mh.test.page;
 
 import lombok.Data;
 
