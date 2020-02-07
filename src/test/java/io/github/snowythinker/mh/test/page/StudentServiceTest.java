@@ -25,6 +25,11 @@ public class StudentServiceTest {
 		studentService.createTable();
 		studentService.batchInsert();
 	}
+	
+	@Test
+	public void testBatchInsert() {
+		studentService.batchInsert();
+	}
 
 	@Test
 	public void testQueryPage() throws IOException {

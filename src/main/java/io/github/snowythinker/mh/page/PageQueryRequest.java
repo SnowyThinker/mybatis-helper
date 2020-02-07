@@ -36,8 +36,8 @@ public class PageQueryRequest {
 	@ApiModelProperty(value="表单排序", required=false)
 	private List<PageQuerySort> sorts = new ArrayList<>();
 	
-	/*@ApiModelProperty("总记录数")
-	private Long totalCount;*/
+	@ApiModelProperty(value="总记录数", hidden=true)
+	private Long totalCount;
 	
 	public Map<String, Object> asMap() {
 		Map<String, Object> rs = new HashMap<String, Object>();
