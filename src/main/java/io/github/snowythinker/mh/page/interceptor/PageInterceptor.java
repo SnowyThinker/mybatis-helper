@@ -1,6 +1,12 @@
 package io.github.snowythinker.mh.page.interceptor;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
+import javax.sql.DataSource;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -16,16 +22,33 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+import io.github.snowythinker.mh.page.DatabaseType;
 import io.github.snowythinker.mh.page.PageQueryRequest;
+import io.github.snowythinker.mh.page.dialect.Dialect;
+import io.github.snowythinker.mh.page.dialect.H2Dialect;
+import io.github.snowythinker.mh.page.dialect.MySQLDialect;
+import io.github.snowythinker.mh.page.dialect.OracleDialect;
+import io.github.snowythinker.mh.page.dialect.SQLServerDialect;
 
 
 @Intercepts({ 
 	@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }) 
 })
 public class PageInterceptor implements Interceptor{
+	
+	private static final Map<DatabaseType, Dialect> dialects = new HashMap<>();
+	
+	//private static final Log logger = LogFactory.getLog(PageInterceptor.class);
+	
+	static {
+		dialects.put(DatabaseType.H2, new H2Dialect());
+		dialects.put(DatabaseType.MariaDB, new MySQLDialect());
+		dialects.put(DatabaseType.MySQL, new MySQLDialect());
+		dialects.put(DatabaseType.Oracle, new OracleDialect());
+		dialects.put(DatabaseType.SQLServer, new SQLServerDialect());
+	}
 
     public Object intercept(Invocation invocation) throws Throwable {
-        //当前环境 MappedStatement，BoundSql，及sql取得
 		MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
 		Object parameter = invocation.getArgs()[1];
 		BoundSql boundSql = mappedStatement.getBoundSql(parameter);
@@ -40,6 +63,14 @@ public class PageInterceptor implements Interceptor{
         if(null == queryPage) {
         	return invocation.proceed();
         }
+        
+        DataSource dataSource = mappedStatement.getConfiguration().getEnvironment().getDataSource();
+        Connection connection = dataSource.getConnection();
+        DatabaseMetaData metaData = connection.getMetaData();
+        String dbTypeName = metaData.getDatabaseProductName();
+        
+        DatabaseType databaseType = DatabaseType.valueOf(dbTypeName);
+        Dialect dialect = dialects.get(databaseType);
         
         //Page对象存在的场合，开始分页处理
         /*String countSql = getCountSql(originalSql);
@@ -57,14 +88,10 @@ public class PageInterceptor implements Interceptor{
         countStmt.close();
         connection.close();
         queryPage.setTotalCount(totalCount);*/
-
-        //对原始Sql追加limit
-        int pageSize = queryPage.getPageSize();
-        int startRow = (queryPage.getCurrentPage() - 1) * pageSize;
-        //int endRow = queryPage.getCurrentPage() * pageSize;
-        StringBuffer sb = new StringBuffer();
-        sb.append(originalSql).append(" limit ").append(startRow).append(",").append(pageSize);
-        BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, sb.toString());
+        
+        String wrappedSql = dialect.paginationSqlWrap(originalSql, queryPage.getCurrentPage(), queryPage.getPageSize());
+        
+        BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, wrappedSql);
         MappedStatement newMs = copyFromMappedStatement(mappedStatement,new BoundSqlSqlSource(newBoundSql));
         invocation.getArgs()[0]= newMs;
             
@@ -91,7 +118,6 @@ public class PageInterceptor implements Interceptor{
         builder.fetchSize(ms.getFetchSize());
         builder.statementType(ms.getStatementType());
         builder.keyGenerator(ms.getKeyGenerator());
-        //builder.key(ms.getK());
         builder.timeout(ms.getTimeout());
         builder.parameterMap(ms.getParameterMap());
         builder.resultMaps(ms.getResultMaps());

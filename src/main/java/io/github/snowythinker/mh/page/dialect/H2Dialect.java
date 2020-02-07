@@ -1,6 +1,6 @@
 package io.github.snowythinker.mh.page.dialect;
 
-public class MySQLDialect implements Dialect {
+public class H2Dialect implements Dialect {
 
 	@Override
 	public String paginationSqlWrap(String originalSql, int currentPage, int pageSize) {
