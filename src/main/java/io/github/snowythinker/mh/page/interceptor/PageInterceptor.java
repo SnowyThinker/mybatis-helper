@@ -28,7 +28,6 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 import io.github.snowythinker.mh.page.DatabaseType;
-import io.github.snowythinker.mh.page.PageQueryRequest;
 import io.github.snowythinker.mh.page.dialect.Dialect;
 import io.github.snowythinker.mh.page.dialect.H2Dialect;
 import io.github.snowythinker.mh.page.dialect.MySQLDialect;
@@ -67,7 +66,7 @@ public class PageInterceptor implements Interceptor{
         }
         
         Object parameterObject = boundSql.getParameterObject();
-        PageQueryRequest queryPage = searchPageWithXpath(parameterObject);
+        Map<String, Object> queryPage = checkPaginationCondition(parameterObject);
         if(null == queryPage) {
         	return invocation.proceed();
         }
@@ -81,9 +80,11 @@ public class PageInterceptor implements Interceptor{
         Dialect dialect = dialects.get(databaseType);
         
         Long totalCount = this.invokeTotalCount(originalSql, executor, mappedStatement, boundSql, parameter);
-        queryPage.setTotalCount(totalCount);
+        queryPage.put("totalCount", totalCount);
         
-        String wrappedSql = dialect.paginationSqlWrap(originalSql, queryPage.getCurrentPage(), queryPage.getPageSize());
+        Integer currentPage = (Integer) queryPage.get("currentPage");
+    	Integer pageSize = (Integer) queryPage.get("pageSize");
+        String wrappedSql = dialect.paginationSqlWrap(originalSql, currentPage, pageSize);
         
         BoundSql newBoundSql = MappedStatementUtil.copyFromBoundSql(mappedStatement, boundSql, wrappedSql);
         MappedStatement newMs = MappedStatementUtil.copyFromMappedStatement(mappedStatement,new BoundSqlSqlSource(newBoundSql));
@@ -127,15 +128,18 @@ public class PageInterceptor implements Interceptor{
 		return countResultList.get(0);
 	}
 
-	private PageQueryRequest searchPageWithXpath(Object o) {
-        if (o instanceof PageQueryRequest) {
-        	PageQueryRequest query = (PageQueryRequest) o;
-            if(null != query.getCurrentPage() && null != query.getPageSize()) {
-            	return query;
-            }
-        }
-       return null;
-    }
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> checkPaginationCondition(Object o) {
+		if (o instanceof HashMap) {
+			Map<String, Object> query = (Map<String, Object>) o;
+			Integer currentPage = (Integer) query.get("currentPage");
+			Integer pageSize = (Integer) query.get("pageSize");
+			if (null != currentPage && null != pageSize) {
+				return query;
+			}
+		}
+		return null;
+	}
 
 
     private String getCountSql(String sql) {

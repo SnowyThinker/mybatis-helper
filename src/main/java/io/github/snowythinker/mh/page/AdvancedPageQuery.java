@@ -1,6 +1,7 @@
 package io.github.snowythinker.mh.page;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +32,14 @@ public abstract class AdvancedPageQuery<T extends Object> {
 
 	public abstract void setConditions(T conditions);
 	
-	public abstract Map<String, Object> asMap();
+	public Map<String, Object> asMap() {
+		Map<String, Object> rs = new HashMap<String, Object>();
+		rs.put("pageSize", pageSize);
+		rs.put("currentPage", currentPage);
+		
+		rs.putAll(PojoUtils this.getConditions());
+		rs.put("sorts", hump2UnderLine(sorts));
+		
+		return rs;
+	}
 }

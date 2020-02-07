@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import io.github.snowythinker.mh.page.PageQueryRequest;
 import io.github.snowythinker.mh.page.PageQueryResponse;
+import io.github.snowythinker.mh.page.PageQuerySort;
 
 public class StudentServiceTest {
 	
@@ -33,11 +34,14 @@ public class StudentServiceTest {
 
 	@Test
 	public void testQueryPage() throws IOException {
-		//StudentService studentService = new StudentService();
-		
 		PageQueryRequest pageQuery = new PageQueryRequest();
 		pageQuery.setPageSize(10);
 		pageQuery.setCurrentPage(2);
+		pageQuery.getConditions().put("name", "Andrew");
+		pageQuery.getConditions().put("passportNumber", "OSI-9002332");
+		
+		pageQuery.getSorts().add(new PageQuerySort("name", "desc"));
+		pageQuery.getSorts().add(new PageQuerySort("passportNumber", "desc"));
 		
 		PageQueryResponse<Student> pageResult = studentService.queryPageList(pageQuery);
 		System.out.println(pageResult);

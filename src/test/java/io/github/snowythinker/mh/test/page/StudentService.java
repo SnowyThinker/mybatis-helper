@@ -2,6 +2,7 @@ package io.github.snowythinker.mh.test.page;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -33,14 +34,22 @@ public class StudentService {
 			student.setName(RandomStringUtils.randomAscii(5, 10));
 			student.setPassportNumber(RandomStringUtils.randomAlphanumeric(10, 20));
 			studentMapper.insert(student);	
+			
+			Student student2 = new Student();
+			student2.setId(UUID.randomUUID().toString());
+			student2.setName("Andrew");
+			student2.setPassportNumber("OSI-9002332");
+			studentMapper.insert(student2);	
 		}
 		
 		sqlSessionFactory.openSession().commit();
 	}
 
 	public PageQueryResponse<Student> queryPageList(PageQueryRequest pageQuery) throws IOException {
-		List<Student> dataList = studentMapper.queryPageList(pageQuery);
-		Long totalCount = studentMapper.queryTotalCount(pageQuery);
+		Map<String, Object> params = pageQuery.asMap();
+		
+		List<Student> dataList = studentMapper.queryPageList(pageQuery.asMap());
+		Long totalCount = (Long) params.get("totalCount");
 		
 		return new PageQueryResponse<>(dataList, totalCount, pageQuery);
 	}

@@ -43,9 +43,20 @@ mybatis.xml 添加typeHandler
 ~~~
 
 ####获取 mapper.xml 文件方法 SQL语句
-~~~
+~~~java
 String sql = MybatisSqlHelper.getMapperSql("oi.github.snowthinker.mapper.UserMapper", "queryById", 324);
 System.out.println(sql);
+~~~
+
+### 分页支持
+~~~java
+# mybatis.xml 添加如下配置
+<plugins>
+	<plugin interceptor="io.github.snowythinker.mh.page.interceptor.PageInterceptor" />
+</plugins>
+	
+#java Service 如果调用	
+List<Student> queryPageList(PageQueryRequest pageQuery);
 ~~~
 
 
