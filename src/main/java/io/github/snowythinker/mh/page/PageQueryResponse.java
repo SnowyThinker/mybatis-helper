@@ -11,16 +11,16 @@ import lombok.Data;
 public class PageQueryResponse<T> {
 	
 	@ApiModelProperty("总记录数")
-	private long totalCount;
+	private Long totalCount;
 
 	@ApiModelProperty("每页记录数")
-	private int pageSize;
+	private Integer pageSize;
 
 	@ApiModelProperty("总页数")
-	private int totalPage;
+	private Integer totalPage;
 
 	@ApiModelProperty("当前页数")
-	private int currentPage;
+	private Integer currentPage;
 
 	@ApiModelProperty("列表数据")
 	private List<T> list;
@@ -28,20 +28,24 @@ public class PageQueryResponse<T> {
 	@ApiModelProperty("其它数据")
 	private Map<String, ?> additional = new HashMap<>();
 	
-	public PageQueryResponse(List<T> list, long totalCount, int pageSize, int currentPage) {
+	public PageQueryResponse(List<T> list, Long totalCount, Integer pageSize, Integer currentPage) {
 		this.list = list;
 		this.totalCount = totalCount;
 		this.pageSize = pageSize;
 		this.currentPage = currentPage;
-		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
+		if(null != totalCount && null != pageSize) {
+			this.totalPage = (int)Math.ceil((double)totalCount/pageSize);	
+		}
 	}
 	
-	public PageQueryResponse(List<T> list, long totalCount, PageQueryRequest pageQuery) {
+	public PageQueryResponse(List<T> list, Long totalCount, PageQueryRequest pageQuery) {
 		this.list = list;
 		this.totalCount = totalCount;
 		this.pageSize = pageQuery.getPageSize();
 		this.currentPage = pageQuery.getCurrentPage();
-		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
+		if(null != totalCount && null != pageQuery && null != pageSize) {
+			this.totalPage = (int)Math.ceil((double)totalCount/pageSize);	
+		}
 	}
 
 	@Override

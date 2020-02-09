@@ -58,10 +58,10 @@ public class PageInterceptor implements Interceptor{
 		MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
 		Object parameter = invocation.getArgs()[1];
 		BoundSql boundSql = mappedStatement.getBoundSql(parameter);
-		String originalSql = boundSql.getSql().trim().toUpperCase();
+		String originalSql = boundSql.getSql().trim().toLowerCase();
 		Executor executor = (Executor) invocation.getTarget();
 		
-        if(originalSql.contains("COUNT(")) {
+        if(originalSql.contains("count(")) {
         	return invocation.proceed();
         }
         
