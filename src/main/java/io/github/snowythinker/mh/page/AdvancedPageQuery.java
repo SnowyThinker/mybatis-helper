@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 
+import io.github.snowthinker.model.PojoHelper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -37,8 +38,8 @@ public abstract class AdvancedPageQuery<T extends Object> {
 		rs.put("pageSize", pageSize);
 		rs.put("currentPage", currentPage);
 		
-		rs.putAll(PojoUtils this.getConditions());
-		rs.put("sorts", hump2UnderLine(sorts));
+		rs.putAll(PojoHelper.convertPojo2Map(this.getConditions()));
+		rs.put("sorts", sorts);
 		
 		return rs;
 	}

@@ -4,21 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 
+import io.github.snowthinker.model.PojoHelper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 
 @Data
 public class PageQueryRequest {
-	
-	private static final Pattern humpPattern = Pattern.compile("[A-Z]");	
 	
 	@NotNull(message="当前页数不能为空")
 	@Range(min=1, message="请输入合法的当前页数")
@@ -52,7 +49,7 @@ public class PageQueryRequest {
 	
 	private List<PageQuerySort> hump2UnderLine(List<PageQuerySort> sortList) {
 		for(PageQuerySort pageSort : sortList) {
-			String newKey = hump2Line(pageSort.getOrderBy());
+			String newKey = PojoHelper.hump2Line(pageSort.getOrderBy());
 			pageSort.setOrderBy(newKey);
 		}
 		return sortList;
@@ -72,14 +69,4 @@ public class PageQueryRequest {
 		}
 		return rsMap;
 	}*/
-
-	public static String hump2Line(String str) {
-        Matcher matcher = humpPattern.matcher(str);
-        StringBuffer sb = new StringBuffer();
-        while (matcher.find()) {
-            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
-        }
-        matcher.appendTail(sb);
-        return sb.toString();
-    }
 }
