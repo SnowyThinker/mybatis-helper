@@ -26,14 +26,14 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  *
  */
 public class MybatisSqlHelper {
-    /**
-     * 通过接口获取sql
-     *
-     * @param mapper
-     * @param methodName
-     * @param args
-     * @return
-     */
+    
+	/**
+	 * <p>通过接口获取sql
+	 * @param mapper The Mapper class
+	 * @param methodName The method name
+	 * @param args The args
+	 * @return SQL result
+	 */
     public static String getMapperSql(Object mapper, String methodName, Object... args) {
         MetaObject metaObject = SystemMetaObject.forObject(mapper);
         SqlSession session = (SqlSession) metaObject.getValue("h.sqlSession");
@@ -47,12 +47,11 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * 通过Mapper方法名获取sql
-     *
-     * @param session
-     * @param fullMapperMethodName
-     * @param args
-     * @return
+     * <p>通过Mapper方法名获取sql
+     * @param session The SQL session
+     * @param fullMapperMethodName The full name of mapper
+     * @param args The args
+     * @return SQL result
      */
     public static String getMapperSql(SqlSession session, String fullMapperMethodName, Object... args) {
         if (args == null || args.length == 0) {
@@ -69,13 +68,12 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * 通过Mapper接口和方法名
-     *
-     * @param session
-     * @param mapperInterface
-     * @param methodName
-     * @param args
-     * @return
+     * <p>通过Mapper接口和方法名
+     * @param session The SQL session 
+     * @param mapperInterface The mapper class
+     * @param methodName The method name
+     * @param args The args
+     * @return SQL result
      */
     @SuppressWarnings("unchecked")
 	public static String getMapperSql(SqlSession session, Class<?> mapperInterface, String methodName, Object... args) {
@@ -104,23 +102,21 @@ public class MybatisSqlHelper {
 
 
     /**
-     * 通过命名空间方式获取sql
-     *
-     * @param session
-     * @param namespace
-     * @return
+     * <p>通过命名空间方式获取sql
+     * @param session The SQL session
+     * @param namespace The namespace
+     * @return SQL result
      */
     public static String getNamespaceSql(SqlSession session, String namespace) {
         return getNamespaceSql(session, namespace, null);
     }
 
     /**
-     * 通过命名空间方式获取sql
-     *
-     * @param session
-     * @param namespace
-     * @param params
-     * @return
+     * <p>通过命名空间方式获取sql
+     * @param session The SQL session
+     * @param namespace The namespace
+     * @param params The parameters
+     * @return SQL result
      */
     public static String getNamespaceSql(SqlSession session, String namespace, Object params) {
         params = wrapCollection(params);
@@ -155,16 +151,6 @@ public class MybatisSqlHelper {
         return sql;
     }
 
-    /**
-     * 根据类型替换参数
-     * 仅作为数字和字符串两种类型进行处理，需要特殊处理的可以继续完善这里
-     *
-     * @param sql
-     * @param value
-     * @param jdbcType
-     * @param javaType
-     * @return
-     */
     private static String replaceParameter(String sql, Object value, JdbcType jdbcType, Class<?> javaType) {
         String strValue = String.valueOf(value);
         if (jdbcType != null) {
@@ -200,11 +186,10 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * 获取指定的方法
-     *
-     * @param clazz
-     * @param methodName
-     * @return
+     * <p>获取指定的方法
+     * @param clazz The mapper class
+     * @param methodName The method name
+     * @return The specific method
      */
     private static Method getDeclaredMethods(Class<?> clazz, String methodName) {
         Method[] methods = clazz.getDeclaredMethods();
@@ -216,14 +201,6 @@ public class MybatisSqlHelper {
         throw new IllegalArgumentException("方法" + methodName + "不存在！");
     }
 
-    /**
-     * 获取参数注解名
-     *
-     * @param method
-     * @param i
-     * @param paramName
-     * @return
-     */
     private static String getParamNameFromAnnotation(Method method, int i, String paramName) {
         final Object[] paramAnnos = method.getParameterAnnotations()[i];
         for (Object paramAnno : paramAnnos) {
@@ -234,12 +211,6 @@ public class MybatisSqlHelper {
         return paramName;
     }
 
-    /**
-     * 简单包装参数
-     *
-     * @param object
-     * @return
-     */
     private static Object wrapCollection(final Object object) {
         if (object instanceof List) {
             Map<String, Object> map = new HashMap<String, Object>();
