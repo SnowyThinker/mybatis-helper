@@ -132,10 +132,12 @@ public class PageInterceptor implements Interceptor{
 	private Map<String, Object> checkPaginationCondition(Object o) {
 		if (o instanceof HashMap) {
 			Map<String, Object> query = (Map<String, Object>) o;
-			Integer currentPage = (Integer) query.get("currentPage");
-			Integer pageSize = (Integer) query.get("pageSize");
-			if (null != currentPage && null != pageSize) {
-				return query;
+			if(query.containsKey("currentPage") && query.containsKey("pageSize")) {
+				Integer currentPage = (Integer) query.get("currentPage");
+				Integer pageSize = (Integer) query.get("pageSize");
+				if (null != currentPage && null != pageSize) {
+					return query;
+				}	
 			}
 		}
 		return null;
