@@ -13,7 +13,6 @@ import io.github.snowthinker.model.PojoHelper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-
 @Data
 public class PageQueryRequest {
 	
@@ -54,19 +53,4 @@ public class PageQueryRequest {
 		}
 		return sortList;
 	}
-
-	/*private Map<? extends String, ? extends Object> hump2UnderLine(Map<String, Object> sorts,Map<String, Object> rs) {
-		if(null == sorts || sorts.isEmpty()) {
-			return null;
-		}
-		
-		Map<String, Object> rsMap = new LinkedHashMap<>();
-		
-		for (Iterator<String> iter = sorts.keySet().iterator(); iter.hasNext();) {
-			String key = iter.next();
-			String newKey = hump2Line(key);
-			rsMap.put(newKey, sorts.get(key));
-		}
-		return rsMap;
-	}*/
 }
