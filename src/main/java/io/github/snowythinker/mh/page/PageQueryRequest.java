@@ -7,13 +7,16 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import io.github.snowythinker.model.PojoHelper;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
-import io.github.snowthinker.model.PojoHelper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
 public class PageQueryRequest {
 	
 	@NotNull(message="当前页数不能为空")
@@ -26,10 +29,10 @@ public class PageQueryRequest {
 	@ApiModelProperty(value="页数大小", required=true, example="10")
 	private Integer pageSize;
 	
-	@ApiModelProperty(value="表单条件", required=false)
+	@ApiModelProperty(value="表单条件")
 	private Map<String, Object> conditions = new HashMap<>();
 	
-	@ApiModelProperty(value="表单排序", required=false)
+	@ApiModelProperty(value="表单排序")
 	private List<PageQuerySort> sorts = new ArrayList<>();
 	
 	@ApiModelProperty(value="总记录数", hidden=true)

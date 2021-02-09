@@ -2,12 +2,12 @@ package io.github.snowythinker.mh.test.page;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
 
 import io.github.snowythinker.mh.page.PageQueryRequest;
 import io.github.snowythinker.mh.page.PageQueryResponse;
 import io.github.snowythinker.mh.page.PageQuerySort;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class StudentServiceTest {
 	
@@ -21,7 +21,7 @@ public class StudentServiceTest {
 		}
 	}
 	
-	@Before
+	@BeforeEach
 	public void testSetup() {
 		studentService.createTable();
 		studentService.batchInsert();

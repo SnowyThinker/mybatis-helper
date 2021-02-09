@@ -7,13 +7,16 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import io.github.snowythinker.model.PojoHelper;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
-import io.github.snowthinker.model.PojoHelper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
 public abstract class AdvancedPageQuery<T extends Object> {
 	
 	@NotNull(message="当前页数不能为空")
@@ -26,21 +29,28 @@ public abstract class AdvancedPageQuery<T extends Object> {
 	@ApiModelProperty(value="页数大小", required=true, example="10")
 	private Integer pageSize;
 	
-	@ApiModelProperty(value="表单排序（排序字段: 排序方向） sendTime : desc", required=false)
+	@ApiModelProperty(value="表单排序（排序字段: 排序方向） sendTime : desc")
 	private List<PageQuerySort> sorts = new ArrayList<>();
     
 	public abstract T getConditions();
 
 	public abstract void setConditions(T conditions);
-	
+
+	@ApiModelProperty(hidden = true)
+	public Long getBeginRow() {
+		if(null == currentPage || null == pageSize) {
+			return 0L;
+		}
+		return new Long(this.currentPage * pageSize);
+	}
+
+
 	public Map<String, Object> asMap() {
-		Map<String, Object> rs = new HashMap<String, Object>();
-		rs.put("pageSize", pageSize);
-		rs.put("currentPage", currentPage);
+		Map<String, Object> dataMap = PojoHelper.convertPojo2Map(this.getConditions());
+		dataMap.put("beginRow", this.getBeginRow());
+		dataMap.put("pageSize", this.pageSize);
+		dataMap.put("sorts", sorts);
 		
-		rs.putAll(PojoHelper.convertPojo2Map(this.getConditions()));
-		rs.put("sorts", sorts);
-		
-		return rs;
+		return dataMap;
 	}
 }
