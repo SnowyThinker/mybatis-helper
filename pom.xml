@@ -10,7 +10,7 @@
 
 	<name>mybatis-helper</name>
 	<url>https://github.com/snowyThinker/mybatis-helper</url>
-	<description>Help to improve development speed</description>
+	<description>Accelerate development speed while using MyBatis</description>
 
 	<properties>
 		<java.version>1.8</java.version>

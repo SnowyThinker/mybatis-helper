@@ -8,15 +8,17 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 import io.github.snowythinker.model.PojoHelper;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class PageQueryRequest {
 	
 	@NotNull(message="当前页数不能为空")

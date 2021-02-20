@@ -31,7 +31,6 @@ public abstract class SimplePageQuery<T extends Object> {
     @ApiModelProperty(value="conditions")
     private Map<String, Object> conditions = new HashMap<>();
 
-
     public Map<String, Object> toMap() {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.putAll(conditions);

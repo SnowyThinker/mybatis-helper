@@ -1,6 +1,7 @@
 package io.github.snowythinker.mh.test.page;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -46,11 +47,15 @@ public class StudentService {
 	}
 
 	public PageQueryResponse<Student> queryPageList(PageQueryRequest pageQuery) throws IOException {
-		Map<String, Object> params = pageQuery.asMap();
+
+		PageQueryResponse<Student> pageQueryResponse = studentMapper.queryPageList(pageQuery.asMap());
+		return pageQueryResponse;
+		//Long totalCount = 0L;//(Long) params.get("totalCount");
 		
-		List<Student> dataList = studentMapper.queryPageList(pageQuery.asMap());
-		Long totalCount = (Long) params.get("totalCount");
-		
-		return new PageQueryResponse<>(dataList, totalCount, pageQuery);
+		//return new PageQueryResponse<>(dataList, totalCount, pageQuery);
+	}
+
+	public PageQueryResponse<Student> queryList() {
+		return studentMapper.queryList(new HashMap<>());
 	}
 }

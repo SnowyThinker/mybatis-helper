@@ -1,17 +1,10 @@
 package io.github.snowythinker.mh.page.interceptor;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import io.github.snowythinker.mh.page.DatabaseType;
 import io.github.snowythinker.mh.page.PageQueryResponse;
+import io.github.snowythinker.mh.page.dialect.*;
+import io.github.snowythinker.mh.util.ExecutorUtil;
+import io.github.snowythinker.mh.util.MappedStatementUtil;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.logging.Log;
@@ -19,33 +12,26 @@ import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import io.github.snowythinker.mh.page.DatabaseType;
-import io.github.snowythinker.mh.page.dialect.Dialect;
-import io.github.snowythinker.mh.page.dialect.H2Dialect;
-import io.github.snowythinker.mh.page.dialect.MySQLDialect;
-import io.github.snowythinker.mh.page.dialect.OracleDialect;
-import io.github.snowythinker.mh.page.dialect.SQLServerDialect;
-import io.github.snowythinker.mh.util.ExecutorUtil;
-import io.github.snowythinker.mh.util.MappedStatementUtil;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.util.*;
 
 
 @Intercepts({ 
 	@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }) 
 })
-public class PageInterceptor implements Interceptor{
+public class CustomPageInterceptor implements CustomInterceptor{
 	
 	private static final Map<DatabaseType, Dialect> dialects = new HashMap<>();
 	
-	private static final Log logger = LogFactory.getLog(PageInterceptor.class);
+	private static final Log logger = LogFactory.getLog(CustomPageInterceptor.class);
 	
 	static {
 		dialects.put(DatabaseType.H2, new H2Dialect());
@@ -150,7 +136,17 @@ public class PageInterceptor implements Interceptor{
         return "SELECT COUNT(*) FROM (" + sql + ") t";
     }
 
-    public class BoundSqlSqlSource implements SqlSource {
+	@Override
+	public void before(Invocation invocation) {
+
+	}
+
+	@Override
+	public void after(Invocation invocation, Object result) {
+
+	}
+
+	public class BoundSqlSqlSource implements SqlSource {
         BoundSql boundSql;
         public BoundSqlSqlSource(BoundSql boundSql) {
             this.boundSql = boundSql;

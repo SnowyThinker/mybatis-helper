@@ -5,9 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.*;
+import org.apache.ibatis.type.Alias;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@Alias("PageQueryResponse")
 public class PageQueryResponse<T> {
 	
 	@ApiModelProperty("总记录数")

@@ -36,14 +36,20 @@ public class StudentServiceTest {
 	public void testQueryPage() throws IOException {
 		PageQueryRequest pageQuery = new PageQueryRequest();
 		pageQuery.setPageSize(10);
-		pageQuery.setCurrentPage(2);
-		pageQuery.getConditions().put("name", "Andrew");
-		pageQuery.getConditions().put("passportNumber", "OSI-9002332");
-		
-		pageQuery.getSorts().add(new PageQuerySort("name", "desc"));
-		pageQuery.getSorts().add(new PageQuerySort("passportNumber", "desc"));
+		pageQuery.setCurrentPage(1);
+//		pageQuery.getConditions().put("name", "Andrew");
+//		pageQuery.getConditions().put("passportNumber", "OSI-9002332");
+//
+//		pageQuery.getSorts().add(new PageQuerySort("name", "desc"));
+//		pageQuery.getSorts().add(new PageQuerySort("passportNumber", "desc"));
 		
 		PageQueryResponse<Student> pageResult = studentService.queryPageList(pageQuery);
 		System.out.println(pageResult);
+	}
+
+	@Test
+	public void testQueryList(){
+		PageQueryResponse<Student> pageResp = studentService.queryList();
+		System.out.println(pageResp);
 	}
 }
