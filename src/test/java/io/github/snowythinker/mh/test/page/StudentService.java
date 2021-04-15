@@ -48,14 +48,16 @@ public class StudentService {
 
 	public PageQueryResponse<Student> queryPageList(PageQueryRequest pageQuery) throws IOException {
 
-		PageQueryResponse<Student> pageQueryResponse = studentMapper.queryPageList(pageQuery.asMap());
-		return pageQueryResponse;
+		List<Student> pageList = studentMapper.queryPageList(pageQuery.asMap());
+		//PageQueryResponse<Student> pageQueryResponse = studentMapper.queryPageList(pageQuery.asMap());
+		return null;
 		//Long totalCount = 0L;//(Long) params.get("totalCount");
 		
 		//return new PageQueryResponse<>(dataList, totalCount, pageQuery);
 	}
 
 	public PageQueryResponse<Student> queryList() {
-		return studentMapper.queryList(new HashMap<>());
+		//return studentMapper.queryList(new HashMap<>());
+		return null;
 	}
 }

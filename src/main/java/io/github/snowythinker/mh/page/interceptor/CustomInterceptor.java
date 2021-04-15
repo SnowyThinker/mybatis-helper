@@ -1,8 +1,9 @@
 package io.github.snowythinker.mh.page.interceptor;
 
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Invocation;
 
-public interface CustomInterceptor {
+public interface CustomInterceptor extends Interceptor {
 
     /**
      * 前置拦截
